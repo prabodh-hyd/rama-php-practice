@@ -4,6 +4,14 @@
 
 <div>
     Products
+    <div>
+        @if(session()->has('success'))
+        <div>
+            {{session('success')}}
+</div>
+
+        @endif
+    </div>
     <button onclick="create()">create product</button>
     <script>
         function create(){
@@ -23,8 +31,9 @@
                 <th>image</th>
                 <th>slug</th>
                 <th>price</th>
-                
-    </tr>
+                <th>edit</th>
+                <th>delete</th>
+  </tr>
     </thead>
     <tbody>
         @foreach($products as $product)
@@ -37,6 +46,19 @@
             <td>{{$product->image}}</td>
             <td>{{$product->slug}}</td>
             <td>{{$product->price}}</td>
+            <td>
+                <a href="{{route('product.edit',['product'=>$product])}}">Edit</a>
+            </td>
+            <td>
+            <form method='post' action="{{route('product.delete',['product'=>$product])}}">
+                @csrf
+                @method('DELETE')
+                <input type="submit" value="delete" />
+
+    </form>
+
+
+    </td>
         </tr>
 
 
