@@ -26,49 +26,64 @@ class ProductController extends Controller
         'description'=>'required',
         'price'=>['required', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
         'short_notes'=>'required',
-        'image'=>'required',
+        'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'slug'=>'required',
+        'status'=>'required',
     ]);
+    if($request->hasfile('image'))
+    {
+       $imagePath=$request->file('image') ->store('images','public');
+       $data['image']=$imagePath;
+    }
     $newProduct=Product::create($data);
     return redirect(route('product.index'));
 }
+
+public function edit(Product $product){
+   return view('products.edit',['product'=>$product]);
+
 }
-  /*
-    public function store(Request $request){
-        $newpost=Product::create(['title'=>$request->title,
-        'short_notes' => $request->short_notes,
-            'price' => $request->price
-        ]);
-        return redirect('product/' . $newPost->id . '/edit');
-    }
-      public function create(){
-        return view('product.add');
 
-    }
-    public function show(Product $product)
-    {
-        //
-    }
-    public function edit(Product $product)
-    {
-        return view('product.edit', [
-            'product' => $product,
-        ]);
-    }
-        public function update(Request $request, Product $product)
-        {
-            $product->update([
-                'title' => $request->title,
-                'short_notes' => $request->short_notes,
-                'price' => $request->price
-            ]);
-            
-            return redirect('product/' . $product->id . '/edit');
-        }
+public function update(Product $product,Request $request){
+    $data=$request->validate([
+        'title'=>'required',
+        'description'=>'required',
+        'price'=>['required', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
+        'short_notes'=>'required',
+        'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'slug'=>'required',
+        'status'=>'required',
+    ]);
+    if ($request->hasFile('image')) {
         
-        public function destroy(Product $product)
-        {
-            $product->delete();
-            return redirect('product/');
-        }*/
+        if ($product->image) {
+            \Storage::delete('public/' . $product->image);
+        }
+        $imagePath = $request->file('image')->store('images', 'public');
+        $data['image'] = $imagePath;
+    }
+    $product->update($data);
+    return redirect(route('product.index'))->with('success','product updated successfully');
 
+}
+
+public function delete(Product $product){
+    $product->status='inactive';
+    $product->save();
+    return  redirect(route('product.index'))->with('success','product deleted successfully');
+
+}
+public function updateStatus(Request $request, Product $product)
+{
+    $request->validate([
+        'status' => 'required|in:active,inactive',
+    ]);
+
+    $product->status = $request->status;
+    $product->save();
+
+    return redirect()->route('product.index')->with('success', 'Product status updated successfully');
+}
+ 
+
+}

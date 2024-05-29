@@ -11,5 +11,11 @@ Route::get('/products',[ProductController::class,'index'])->name('product.index'
 Route::get('/products/create',[ProductController::class,'create'])->name('product.create');
 
 Route::post('/products', [ProductController::class, 'store'])->name('product.store');
+Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::patch('/products/{product}/update', [ProductController::class, 'update'])->name('product.update');
+Route::patch('/products/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
+Route::patch('/products/{product}/status', [ProductController::class, 'updateStatus'])->name('product.updateStatus');
 
+
+    
 
