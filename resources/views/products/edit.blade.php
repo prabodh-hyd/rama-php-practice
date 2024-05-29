@@ -8,9 +8,9 @@
 </head>
 <body>
 <h1> Edit a product</h1>
-<form method="post" action="{{route('product.update',['product'=>$product])}}">
+<form method="post" action="{{route('product.update',['product'=>$product])}}" enctype="multipart/form-data">
 @csrf
-@method('PUT')
+@method('PATCH')
    <div>
   <label>title</label>
    <input type="text" name="title" placeholder="title" value="{{$product->title}}" />
@@ -25,7 +25,10 @@
 </div>
 <div>
   <label>image</label>
-   <input type="text" name="image" placeholder="image" value="{{$product->image}}"/>
+   <input type="file" name="image" placeholder="image" value="{{$product->image}}"/>
+   @if($product->image)
+                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->title }}" width="100">
+            @endif
 </div>
 <div>
   <label>slug</label>
@@ -34,6 +37,10 @@
 <div>
   <label>price</label>
    <input type=decimal name="price" placeholder="price" value="{{$product->price}}"/>
+</div>
+<div>
+  <label>status</label>
+   <input type="text" name="status" placeholder="status" value="{{$product->status}}"/>
 </div>
 <div>
     <input type="submit" value="update" />

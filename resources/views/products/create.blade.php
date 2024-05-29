@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1> create a product</h1>
-<form method="post" action="{{route('product.store')}}">
+<form method="post" action="{{route('product.store')}}" enctype="multipart/form-data">
 @csrf
 @method('POST')
    <div>
@@ -25,7 +25,7 @@
 </div>
 <div>
   <label>image</label>
-   <input type="text" name="image" placeholder="image" />
+   <input type="file" name="image" placeholder="image" />
 </div>
 <div>
   <label>slug</label>
@@ -34,6 +34,10 @@
 <div>
   <label>price</label>
    <input type=decimal name="price" placeholder="price" />
+</div>
+<div>
+<label>status</label>
+    <input type="text" name="status" placeholder="status" />
 </div>
 <div>
     <input type="submit" value="save a new product" />
